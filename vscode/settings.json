@@ -1,0 +1,91 @@
+{
+    "scm.defaultViewMode": "tree",
+
+    "vim.insertModeKeyBindings": [
+       { 
+        "before": ["j", "j"],
+        "after": ["<Esc>"]
+       }
+    ],
+
+    "vim.leader": "<Space>", 
+    "vim.normalModeKeyBindingsNonRecursive": [
+        // workbench.view.extensions
+        // https://github.com/VSCodeVim/Vim/issues/5242
+        {
+            "before": ["<Leader>", "k"],
+            "after": ["5","k"]
+        },
+        {
+            "before": ["<Leader>", "j"],
+            "after": ["5","j"]
+        },
+        {
+            "before": ["<Leader>", "D"],
+            "after": ["\"","_"]
+        },
+        
+        {
+            "before": ["<Leader>", "I"],
+            "commands": ["jupyter.createnewinteractive"]
+        }, 
+        {
+            "before": ["<Leader>", "/"],
+            "commands": ["workbench.action.moveEditorToNextGroup"]
+        },
+        {
+            "before": ["<Leader>", "F"],
+            "commands": ["revealFileInOS"]
+        },
+        {
+            "before": ["<Leader>", "<Tab>"],
+            "commands": ["workbench.action.quickOpenPreviousRecentlyUsedEditorInGroup"]
+        },
+        {
+            "before": ["<Leader>", "n", "<Up>"],
+            "commands": ["workbench.action.newGroupAbove"]
+        },
+        {
+            "before": ["<Leader>", "<Down>"],
+            "commands": ["workbench.action.moveActiveEditorGroupDown"]
+        },
+        {
+            "before": ["<Leader>", ","],
+            "commands": ["workbench.action.moveEditorToSecondGroup"]
+        },
+        {
+            "before": ["<Leader>", "1"],
+            "commands": ["workbench.action.focusFirstEditorGroup"]
+        },
+        {
+            "before": ["<Leader>", "2"],
+            "commands": ["workbench.action.focusSecondEditorGroup"]
+        },
+        {
+            "before": ["<Leader>", "3"],
+            "commands": ["workbench.action.focusThirdEditorGroup"]
+        },
+
+        // {
+        //     "before": ["<Leader>", "4"],
+        //     "commands": ["workbench.action.focusFourthEditorGroup"]
+        // },
+        {
+            "before": ["<Leader>", "Z"],
+            "commands": ["workbench.action.toggleZenMode"] // outside Vim:  ctrl+k+ Z
+        },
+        {
+            "before": ["<Leader>", "/"],
+            "commands": ["editor.foldRecursively"] 
+        },
+        {
+            "before": ["<Leader>", "?"],
+            "commands": ["editor.unfoldRecursively"] 
+        }
+    ],
+
+    "vim.easymotion": true,
+    "git.autofetch": true,
+    "git.confirmSync": false,
+    "window.zoomLevel": -1
+}
