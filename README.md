@@ -1,8 +1,27 @@
-## configurations
+## Configurations
 
-This repo contains my source files, and other configuration files.
+Personal configuration and tooling repo.
 
-1. Vimrc 
-2. tmux
-3. git config
-4. source files
+Current areas in this repo:
+
+- `gnome/` for desktop settings and notes
+- `shell-scripts/` for Bash helpers
+- `skills/` for repo-managed agent skills
+- `tmux/` for tmux configuration
+- `vscode/` for editor settings and snippets
+- `yolo/` for older project-specific files that still need sorting
+
+## Bootstrap
+
+Use the bootstrap scripts to wire repo-managed skills into Claude:
+
+```powershell
+.\scripts\bootstrap.ps1
+.\scripts\bootstrap.ps1 -WhatIf
+```
+
+```bash
+./scripts/bootstrap.sh
+```
+
+The Windows script creates junctions under `$HOME\.claude\skills` so the repo stays the source of truth without requiring administrator privileges.

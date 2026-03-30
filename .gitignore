@@ -1,0 +1,36 @@
+# OS noise
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Codex runtime state if mirrored into this repo later
+.codex/auth.json
+.codex/cache/
+.codex/log/
+.codex/sessions/
+.codex/archived_sessions/
+.codex/sqlite/
+.codex/tmp/
+.codex/.tmp/
+.codex/history.jsonl
+.codex/session_index.jsonl
+.codex/models_cache.json
+.codex/*.sqlite
+.codex/*.sqlite-shm
+.codex/*.sqlite-wal
+
+# Claude runtime state if mirrored into this repo later
+.claude/backups/
+.claude/cache/
+.claude/debug/
+.claude/file-history/
+.claude/paste-cache/
+.claude/projects/
+.claude/sessions/
+.claude/shell-snapshots/
+.claude/statsig/
+.claude/telemetry/
+.claude/todos/
+.claude/usage-data/
+.claude/history.jsonl
+.claude/.credentials.json
