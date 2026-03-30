@@ -5,7 +5,8 @@ Personal configuration and tooling repo.
 Current areas in this repo:
 
 - `gnome/` for desktop settings and notes
-- `shell-scripts/` for Bash helpers
+- `scripts/` for bootstrap and setup automation
+- `shell/` for Bash helpers
 - `skills/` for repo-managed agent skills
 - `tmux/` for tmux configuration
 - `vscode/` for editor settings and snippets

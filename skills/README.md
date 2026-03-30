@@ -50,20 +50,28 @@ mkdir -p "$HOME/.claude/skills"
 ln -sfn "$PWD/skills/learn-by-building" "$HOME/.claude/skills/learn-by-building"
 ```
 
-## Install Community Skills With `npx`
+## Install Skills From This Repo With `npx`
 
-Use `npx skills` for third-party or published skills from the skills ecosystem.
-
-Examples:
+Install all skills from this repo globally:
 
 ```bash
-npx skills add vercel-labs/skills@find-skills -g -y
+npx skills add nprithviraj24/.config -g -y
+```
+
+Install a specific skill:
+
+```bash
+npx skills add nprithviraj24/.config@learn-by-building -g -y
+```
+
+Check for updates or list what is installed:
+
+```bash
 npx skills check
 npx skills update
 ```
 
-Use `npx skills add` when the skill lives in a published source.
-Use repo symlinks or junctions when the skill lives in this repo.
+Note: the repo must be public (or the machine must have GitHub access) for `npx skills add` to clone it.
 
 ## Add A New Repo-Managed Skill
 
