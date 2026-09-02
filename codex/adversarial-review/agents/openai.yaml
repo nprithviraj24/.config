@@ -1,0 +1,4 @@
+interface:
+  display_name: "Adversarial Review"
+  short_description: "Red-team a design with independent reviewers and grounded assumptions"
+  default_prompt: "Use $adversarial-review to stress-test this design: manufacture independent perspectives, ground every assumption in executed evidence, and report ranked findings with concrete failure scenarios."

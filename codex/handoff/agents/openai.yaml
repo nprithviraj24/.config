@@ -1,0 +1,4 @@
+interface:
+  display_name: "Handoff"
+  short_description: "Compact this conversation into a handoff document"
+  default_prompt: "Use $handoff to compact this conversation into a handoff document another agent can pick up cold."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Diagnose"
+  short_description: "Disciplined loop for hard bugs and performance regressions"
+  default_prompt: "Use $diagnose to debug this: build a fast deterministic feedback loop first, then reproduce, hypothesise, instrument, fix, and add a regression test."

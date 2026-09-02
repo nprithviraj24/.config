@@ -1,0 +1,4 @@
+# Skills deliberately not installed into ~/.codex, one name per line.
+# duet spawns a Codex thread as the opposing model; running it inside Codex
+# would have Codex argue with itself, which defeats the entire point.
+duet

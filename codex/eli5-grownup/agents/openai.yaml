@@ -1,0 +1,4 @@
+interface:
+  display_name: "ELI5 (grownup)"
+  short_description: "Explain a topic fast, to a smart adult who's new to it"
+  default_prompt: "Use $eli5-grownup to explain a topic to a smart adult who knows nothing about it and everything else about the world."
