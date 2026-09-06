@@ -77,6 +77,27 @@ function Ensure-Junction {
 }
 
 
+function Test-TreesMatch {
+    param([string]$Left, [string]$Right)
+
+    $leftFiles = @(Get-ChildItem -LiteralPath $Left -Recurse -File |
+        ForEach-Object { $_.FullName.Substring($Left.Length).TrimStart('\') } | Sort-Object)
+    $rightFiles = @(Get-ChildItem -LiteralPath $Right -Recurse -File |
+        ForEach-Object { $_.FullName.Substring($Right.Length).TrimStart('\') } | Sort-Object)
+
+    if (Compare-Object -ReferenceObject $leftFiles -DifferenceObject $rightFiles) {
+        return $false
+    }
+
+    foreach ($rel in $leftFiles) {
+        $lh = (Get-FileHash -LiteralPath (Join-Path $Left $rel) -Algorithm SHA256).Hash
+        $rh = (Get-FileHash -LiteralPath (Join-Path $Right $rel) -Algorithm SHA256).Hash
+        if ($lh -ne $rh) { return $false }
+    }
+
+    return $true
+}
+
 function Install-CodexSkill {
     [CmdletBinding(SupportsShouldProcess)]
     param(
@@ -88,28 +109,50 @@ function Install-CodexSkill {
     # Codex cannot use a junction: its validator rejects frontmatter keys Claude
     # uses (argument-hint, disable-model-invocation), and it reads an extra
     # agents/openai.yaml. So it gets a copy with codex/<name>/ layered on top.
-    if (Test-Path -LiteralPath $DestPath) {
-        $existingItem = Get-Item -LiteralPath $DestPath -Force
-        $isReparsePoint = [bool]($existingItem.Attributes -band [IO.FileAttributes]::ReparsePoint)
-        if ($PSCmdlet.ShouldProcess($DestPath, "Remove previous copy")) {
-            if ($isReparsePoint) {
+
+    # Assemble the expected tree first, so this stays idempotent: a re-run that
+    # would produce what is already installed touches nothing and leaves no
+    # backup. Without this, every run backs up a tree it just wrote itself.
+    $staged = Join-Path ([IO.Path]::GetTempPath()) ([IO.Path]::GetRandomFileName())
+    New-Item -ItemType Directory -Path $staged | Out-Null
+    try {
+        Copy-Item -Path (Join-Path $SkillPath "*") -Destination $staged -Recurse -Force
+        if (Test-Path -LiteralPath $OverlayPath) {
+            Copy-Item -Path (Join-Path $OverlayPath "*") -Destination $staged -Recurse -Force
+        }
+
+        if ((Test-Path -LiteralPath $DestPath) -and
+            (Test-TreesMatch -Left $staged -Right $DestPath)) {
+            Write-Host "Already current: $DestPath"
+            return
+        }
+
+        # Anything here that is not what we would have written may be a local edit.
+        if (Test-Path -LiteralPath $DestPath) {
+            $existingItem = Get-Item -LiteralPath $DestPath -Force
+            $isReparsePoint = [bool]($existingItem.Attributes -band [IO.FileAttributes]::ReparsePoint)
+            if (-not $isReparsePoint) {
+                Move-ToBackup -Path $DestPath -WhatIf:$WhatIfPreference
+            } elseif ($PSCmdlet.ShouldProcess($DestPath, "Remove existing reparse point")) {
                 Remove-Item -LiteralPath $DestPath -Force
-            } else {
-                Remove-Item -LiteralPath $DestPath -Recurse -Force
             }
         }
-    }
 
-    if ($PSCmdlet.ShouldProcess($DestPath, "Copy skill from $SkillPath")) {
-        Copy-Item -LiteralPath $SkillPath -Destination $DestPath -Recurse
-    }
-
-    if ((Test-Path -LiteralPath $OverlayPath) -and
-        $PSCmdlet.ShouldProcess($DestPath, "Apply codex overlay")) {
-        Copy-Item -Path (Join-Path $OverlayPath "*") -Destination $DestPath -Recurse -Force
-        Write-Host "Copied $DestPath (+ overlay)"
-    } else {
-        Write-Host "Copied $DestPath"
+        if ($PSCmdlet.ShouldProcess($DestPath, "Install skill from $SkillPath")) {
+            if (Test-Path -LiteralPath $DestPath) {
+                Remove-Item -LiteralPath $DestPath -Recurse -Force
+            }
+            Copy-Item -LiteralPath $staged -Destination $DestPath -Recurse
+            if (Test-Path -LiteralPath $OverlayPath) {
+                Write-Host "Copied $DestPath (+ overlay)"
+            } else {
+                Write-Host "Copied $DestPath"
+            }
+        }
+    } finally {
+        if (Test-Path -LiteralPath $staged) {
+            Remove-Item -LiteralPath $staged -Recurse -Force
+        }
     }
 }
 

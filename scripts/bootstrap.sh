@@ -64,16 +64,30 @@ copy_skill_with_overlay() {
     local skill_dir="$1" target_root="$2" name="$3"
     local dest="$target_root/$name"
 
+    # Assemble the expected tree first, so this stays idempotent: a re-run that
+    # would produce what is already installed touches nothing and leaves no
+    # backup. Without this, every run backs up a tree it just wrote itself.
+    local staged
+    staged="$(mktemp -d)"
+    cp -r "$skill_dir/." "$staged/"
+    local overlaid=""
+    if [[ -d "$codex_overlay/$name" ]]; then
+        cp -r "$codex_overlay/$name/." "$staged/"
+        overlaid=" (+ overlay)"
+    fi
+
+    if [[ -d "$dest" ]] && diff -r "$staged" "$dest" >/dev/null 2>&1; then
+        echo "  already current: $dest"
+        rm -rf "$staged"
+        return
+    fi
+
+    # Anything here that is not what we would have written may be a local edit.
     back_up_if_real "$dest"
     rm -rf "$dest"
-    cp -r "$skill_dir" "$dest"
-
-    if [[ -d "$codex_overlay/$name" ]]; then
-        cp -r "$codex_overlay/$name/." "$dest/"
-        echo "  copied $dest (+ overlay)"
-    else
-        echo "  copied $dest"
-    fi
+    mv "$staged" "$dest"
+    chmod -R u+w "$dest"
+    echo "  copied $dest$overlaid"
 }
 
 mkdir -p "$claude_skills" "$gemini_skills" "$codex_skills"

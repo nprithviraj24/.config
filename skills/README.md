@@ -83,6 +83,7 @@ Codex overlay. Use the bootstrap script if you want working Codex skills.
 | `eli5-grownup` | Explain an unfamiliar topic to a smart adult who knows nothing about *this* topic and everything else about the world. Words first, then a rendered comic-strip graphic. | all three |
 | `grill-me` | Interview the user relentlessly about a plan until every branch of the decision tree is resolved. | all three |
 | `handoff` | Compact the current conversation into a handoff document another agent can pick up cold. | all three |
+| `intake` | Extract what a session settled - decisions, constraints, hard-won facts - and write it into the project's own docs, following the conventions already there. | all three |
 | `improve-codebase-architecture` | Find deepening opportunities in a codebase, informed by its domain language and ADRs. | all three |
 | `learn-by-building` | Turn the agent from a code generator into a teaching partner — checkpoints, predictions, break-it challenges. | all three |
 | `teach` | Teach a topic across sessions in a stateful local learning workspace. | all three |

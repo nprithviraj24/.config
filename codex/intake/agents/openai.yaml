@@ -1,0 +1,4 @@
+interface:
+  display_name: "Intake"
+  short_description: "Write this session's durable findings into the project's docs"
+  default_prompt: "Use $intake to extract what this session settled and write it into the project's own docs, following the conventions already there."
